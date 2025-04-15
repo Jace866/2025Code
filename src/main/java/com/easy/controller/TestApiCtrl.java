@@ -59,7 +59,6 @@ public class TestApiCtrl {
         if(!"".equals(code)){
             params+="&code="+code;
         }
-
         if("tran".equals(flag)){
             String rand = this.getStringRandom(16);
             params="method=tran&type="+type+"&credit="+amt+"&loginname="+username+"&password="+password+"&billno="+rand;  //会员额度转换
