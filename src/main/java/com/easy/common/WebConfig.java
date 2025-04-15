@@ -16,7 +16,7 @@ public class WebConfig implements  WebMvcConfigurer {
     private static String user;
     @Value("${spring.datasource.password}")
     private static String password;
-    @Value("${serverid}")
+    @Value("${server_id}")
     private static Integer serverId = 40;
     @Value("${status}")
     private static Integer status;
