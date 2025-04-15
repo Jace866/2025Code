@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.dao.SysParameterDao">
+    <update id="updateValue">
+        update sys_parameter
+        set value = #{value}
+        where type = #{type}
+          and code = #{code}
+    </update>
+
+    <resultMap id="voMap" type="com.easy.vo.SysParameterVo">
+        <result column="type" property="type"></result>
+        <result column="code" property="code"></result>
+        <result column="value" property="value"></result>
+    </resultMap>
+
+    <select id="getParamValue" resultType="java.lang.String">
+        SELECT value
+        FROM sys_parameter
+        WHERE type = #{type}
+          AND code = #{code}
+          AND status IN (1, 2)
+    </select>
+    <select id="getAllParameter" resultMap="voMap">
+        SELECT type, code, value FROM sys_parameter WHERE cache_flag IN(1,3) ORDER BY type DESC
+    </select>
+    <select id="getParameterByType" resultMap="voMap">
+        SELECT code ,value FROM sys_parameter WHERE type=#{type} AND cache_flag IN(1,3) ORDER BY code
+    </select>
+    <select id="getParamValue3" resultType="java.lang.String">
+        SELECT value
+        FROM sys_parameter
+        WHERE type = #{type}
+          AND code = #{code}
+          AND status = #{status}
+    </select>
+    <select id="getUserBankcodeList" resultType="com.easy.entity.SysParameter">
+        SELECT * FROM sys_parameter WHERE type=#{type} AND status=#{status} AND code!='USDT' ORDER BY seqno2
+    </select>
+</mapper>

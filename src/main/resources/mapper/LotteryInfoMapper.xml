@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.dao.LotteryInfoDao">
+    <resultMap id="initVoMap" type="com.easy.vo.LotteryInitVo">
+        <result column="lottery_id" property="lotteryId"></result>
+        <result column="lottery_code" property="lotteryCode"></result>
+        <result column="lottery_name" property="lotteryName"></result>
+    </resultMap>
+
+    <resultMap id="voMap" type="com.easy.vo.LotteryInitVo">
+        <result column="show_order" property="showOrder"></result>
+        <result column="lottery_code" property="lotteryCode"></result>
+        <result column="lottery_name" property="lotteryName"></result>
+    </resultMap>
+
+    <resultMap id="voMap2" type="com.easy.vo.LotteryInfoVo">
+        <result column="lottery_id" property="lotteryId"></result>
+        <result column="lottery_code" property="lotteryCode"></result>
+        <result column="lottery_name" property="lotteryName"></result>
+        <result column="lottery_type" property="lotteryType"></result>
+        <result column="issues" property="issues"></result>
+        <result column="issue_type" property="issueType"></result>
+        <result column="send_flag" property="sendFlag"></result>
+        <result column="status" property="status"></result>
+        <result column="merchant_id" property="merchantId"></result>
+        <result column="table_name" property="tableName"></result>
+    </resultMap>
+
+    <select id="initFindVos" resultType="com.easy.vo.LotteryInitVo">
+        SELECT DISTINCT lottery_id,lottery_code,lottery_name FROM lottery_info
+    </select>
+    <select id="getLotteryCodeName" resultMap="voMap">
+        SELECT show_order,lottery_code, IF(status=1,lottery_name,CONCAT(lottery_name,'(停)')) lottery_name FROM lottery_info WHERE seq_no=1 AND status IN(0,1) ORDER BY show_order
+    </select>
+    <select id="getLotteryBeanList" resultType="com.easy.entity.LotteryInfo">
+        SELECT * FROM lottery_info WHERE seq_no=1 AND status IN(0,1) AND
+        <![CDATA[ lottery_type <> 'API' ]]> ORDER BY show_order
+    </select>
+    <select id="getLotteryExtList" resultMap="voMap2">
+        SELECT
+            a.lottery_id,
+            a.lottery_code,
+            (IF( b.lottery_name IS NULL, a.lottery_name, b.lottery_name )) lottery_name,
+            a.lottery_type,
+            a.issues,
+            a.issue_type,
+            a.send_flag,
+            a.status,
+            b.merchant_id,
+            (IF(b.merchant_id IS NULL,a.table_name,CONCAT( a.table_name, b.merchant_id ))) table_name
+        FROM
+            lottery_info a LEFT JOIN lottery_info_ext b ON a.lottery_id = b.lottery_id
+        WHERE
+            a.seq_no = 1
+        GROUP BY
+            a.lottery_id,
+            b.merchant_id,
+            b.lottery_name
+    </select>
+    <select id="getLotteryListByGameIds" resultMap="initVoMap">
+        select lottery_id, lottery_name from lottery_info where lottery_id in(#{codes})
+    </select>
+</mapper>

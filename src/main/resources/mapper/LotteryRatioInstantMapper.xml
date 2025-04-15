@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.dao.LotteryRatioInstantDao">
+    <resultMap id="initVoMap" type="com.easy.vo.LotteryRatioInstantInitVo">
+        <result column="lottery_id" property="lotteryId"></result>
+        <result column="method_name" property="methodName"></result>
+        <result column="sub_name" property="subName"></result>
+        <result column="item_id" property="itemId"></result>
+        <result column="item_name" property="itemName"></result>
+    </resultMap>
+    <select id="findVos" resultMap="initVoMap">
+        SELECT lottery_id, method_name, sub_name, item_id, item_name FROM lottery_ratio_instant ORDER BY lottery_id
+    </select>
+</mapper>

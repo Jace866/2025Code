@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.dao.SysRunLogDao">
+    <select id="getLogContent" resultType="java.lang.String">
+        SELECT log_content
+        FROM sys_run_log
+        WHERE log_type = #{logType}
+          AND log_content = #{logContent} LIMIT 0,1
+    </select>
+</mapper>

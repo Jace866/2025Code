@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.dao.SysMerchantDao">
+    <resultMap id="voMap" type="com.easy.vo.SysMerchantVo">
+        <result column="id" property="id"></result>
+        <result column="provider" property="provider"></result>
+        <result column="wallet_aip_address" property="walletAipAddress"></result>
+        <result column="is_tran" property="isTran"></result>
+    </resultMap>
+    <update id="updateBalanceById">
+        update sys_merchant set balance=#{merchantBalance} where id=#{merchantId}
+    </update>
+    <select id="findList" resultMap="voMap">
+        SELECT id, provider, wallet_aip_address, is_tran FROM sys_merchant
+    </select>
+    <select id="findByStatusAndProvider" resultType="com.easy.entity.SysMerchant">
+        select * from sys_merchant where status=#{status} and BINARY provider=#{provider}
+    </select>
+    <select id="findByMerchantIdAndStatus" resultType="com.easy.entity.SysMerchant">
+        select * from sys_merchant where status=#{status} and id=#{merchantId}
+    </select>
+    <select id="queryByMerchantDomainAndIp" resultType="com.easy.entity.SysMerchant">
+        select * from sys_merchant where (''=#{pid} or provider=#{pid}) AND status=1 AND FIND_IN_SET(#{domain},domain)
+            AND (is_ipwhitelist=0 OR (ip_whitelist IS NOT NULL AND INSTR(CONCAT(',',ip_whitelist,','),#{ip})>0)) LIMIT 1
+    </select>
+    <select id="queryByMerchantDomain" resultType="com.easy.entity.SysMerchant">
+        select * from sys_merchant where (''=#{pid} or provider=#{pid}) AND status=1 AND FIND_IN_SET(#{domain},domain) LIMIT 1
+    </select>
+    <select id="queryBalance" resultType="java.math.BigDecimal">
+        select balance from sys_merchant where status=1 and id=#{merchantId} FOR UPDATE
+    </select>
+</mapper>

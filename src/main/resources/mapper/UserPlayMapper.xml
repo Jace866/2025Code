@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.dao.UserPlayDao">
+
+    <resultMap id="voMap" type="com.easy.vo.UserPlayVo">
+        <result column="id," property="id"></result>
+        <result column="user_id," property="userId"></result>
+        <result column="currency_type," property="currencyType"></result>
+        <result column="play_no," property="playNo"></result>
+        <result column="play_time," property="playTime"></result>
+        <result column="lottery_id," property="lotteryId"></result>
+        <result column="issue," property="issue"></result>
+        <result column="ptype," property="ptype"></result>
+        <result column="item_id," property="itemId"></result>
+        <result column="item_code," property="itemCode"></result>
+        <result column="content," property="content"></result>
+        <result column="num," property="num"></result>
+        <result column="money," property="money"></result>
+        <result column="valid_bet," property="validBet"></result>
+        <result column="ratio," property="ratio"></result>
+        <result column="ratio2," property="ratio2"></result>
+        <result column="bonus," property="bonus"></result>
+        <result column="wins," property="wins"></result>
+        <result column="pct," property="pct"></result>
+        <result column="comm," property="comm"></result>
+        <result column="open_code," property="openCode"></result>
+        <result column="open_time," property="openTime"></result>
+        <result column="status," property="status"></result>
+        <result column="test_flag," property="testFlag"></result>
+        <result column="mobile_flag," property="mobileFlag"></result>
+        <result column="is_callbet," property="isCallbet"></result>
+        <result column="transaction_id," property="transactionId"></result>
+        <result column="remark " property="remark"></result>
+        <result column="name" property="name"></result>
+    </resultMap>
+
+    <update id="updateIsEndByPlayNo">
+        UPDATE user_play SET is_send=#{isSend} WHERE status IN (2,3,4,5) AND is_send=0 AND play_no=#{playNo}
+    </update>
+    <select id="findHistoryYesToday" resultMap="voMap">
+        SELECT a.* FROM (SELECT id,user_id,currency_type,SUBSTRING_INDEX(SUBSTRING_INDEX(regfrom,'&amp;',2),'&amp;',-1)
+        name,play_no,
+        data_format(play_time, '%Y-%m-%d %H:%i:%s') play_time,
+        lottery_id,issue,ptype,item_id,item_code,content,num,money,
+        valid_bet,ratio,ratio2,bonus,wins,pct,comm,open_code,
+        data_format(open_time, '%Y-%m-%d %H:%i:%s') open_time,
+        status,test_flag,mobile_flag,is_callbet,transaction_id,remark
+        FROM user_play WHERE status IN (1,2,3,4,5) AND open_time>=#{begin} AND
+        <![CDATA[ open_time <= #{end}]]> UNION ALL SELECT
+        id,user_id,currency_type,SUBSTRING_INDEX(SUBSTRING_INDEX(regfrom,'&amp;',2),'&amp;',-1) name,play_no,
+        data_format(play_time, '%Y-%m-%d %H:%i:%s') play_time,
+        lottery_id,issue,ptype,item_id,item_code,content,num,money,valid_bet,ratio,ratio2,bonus,wins,pct,comm,open_code,
+        data_format(open_time, '%Y-%m-%d %H:%i:%s') open_time,
+        status,test_flag,mobile_flag,is_callbet,transaction_id,remark
+        FROM user_play_hist WHERE status IN (2,3,4,5) AND open_time>=#{begin} AND
+        <![CDATA[ open_time <= #{end}]]>) a ORDER BY a.id DESC
+    </select>
+    <select id="findHistoryToday" resultMap="voMap">
+        SELECT a.id,a.user_id,a.currency_type,a.play_no,
+               SUBSTRING_INDEX(SUBSTRING_INDEX(a.regfrom, '&amp;', 2), '&amp;', -1) name,
+               data_format(a.play_time, '%Y-%m-%d %H:%i:%s') play_time,
+               a.lottery_id, a.issue, a.ptype, a.item_id,a.item_code,
+               a.content,a.num,a.money,a.valid_bet,a.ratio, a.ratio2,
+               a.bonus, a.wins, a.pct,a.comm,a.open_code,
+               data_format(a.open_time, '%Y-%m-%d %H:%i:%s') open_time,
+               a.STATUS,a.test_flag,a.mobile_flag,a.is_callbet,a.transaction_id,a.remark
+        FROM user_play a
+        WHERE a.status IN (1, 2, 3, 4, 5)
+          AND a.open_time >= #{begin}
+          AND
+        <![CDATA[ a.open_time <= #{end}]]>
+        ORDER BY a.id DESC
+    </select>
+</mapper>

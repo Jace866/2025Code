@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.dao.UserWalletDao">
+    <update id="updateBalanceByUserId">
+        UPDATE user_wallet SET balance=#{balance} WHERE user_id=#{uid}
+    </update>
+    <update id="updateBalanceBytableBey">
+        UPDATE user_wallet SET #{tableBey}=#{balance} WHERE user_id=#{uid}
+    </update>
+    <select id="queryBalance" resultType="java.math.BigDecimal">
+        SELECT balance FROM user_wallet WHERE user_id=#{uid} FOR UPDATE
+    </select>
+</mapper>

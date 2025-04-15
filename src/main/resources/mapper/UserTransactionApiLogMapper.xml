@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.dao.UserTransactionApiLogDao">
+    <update id="updateTranLog">
+        UPDATE user_transaction_api_log SET remark=#{remark},status=#{tranStatus} WHERE user_id=#{uid} and trans_no=#{transNo}
+    </update>
+</mapper>
