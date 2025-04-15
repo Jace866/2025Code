@@ -1,6 +1,6 @@
 server:
   port: 8080
-
+#参数
 serverid: 40
 status: 0
 # 数据库配置
