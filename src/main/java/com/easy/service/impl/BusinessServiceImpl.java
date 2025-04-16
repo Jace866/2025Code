@@ -9,6 +9,7 @@ import com.easy.vo.SysMerchantVo;
 import com.easy.vo.UserPlayVo;
 import net.sf.json.JSONObject;
 import org.eclipse.jetty.util.MultiMap;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ import java.util.*;
  * @Date : 2025/4/12
  */
 @Service
-public class BusinessServiceImpl implements BusinessService {
+public class BusinessServiceImpl implements BusinessService, InitializingBean {
     public final static int STATUS_RUNNING = 1; //额度转换状态_进行中
     public final static int STATUS_SUCCESS = 2; //额度转换状态_成功
     public final static int STATUS_INSUFFICIENT_BALANCE = 3;   //额度转换状态_余额不足
@@ -629,5 +630,10 @@ public class BusinessServiceImpl implements BusinessService {
             listReport.add(report);
         }
         return listReport;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        initMerchantMap();
     }
 }
