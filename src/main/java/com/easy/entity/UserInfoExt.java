@@ -25,7 +25,7 @@ public class UserInfoExt implements Serializable {
 	/**
 	 * 用户编号
 	 */
-   	@TableField(value = "user_id")
+   	@TableId(value = "user_id")
 	private Integer userId;
 
 	/**

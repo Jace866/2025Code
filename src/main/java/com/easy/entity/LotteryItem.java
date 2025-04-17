@@ -20,7 +20,7 @@ import java.io.Serializable;
 public class LotteryItem implements Serializable {
 	private static final long serialVersionUID =  3773001318873163359L;
 
-   	@TableField(value = "item_id")
+   	@TableId(value = "item_id")
 	private Integer itemId;
 
    	@TableField(value = "lottery_type")

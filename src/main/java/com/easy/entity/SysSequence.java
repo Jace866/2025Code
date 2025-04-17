@@ -21,7 +21,7 @@ import java.util.Date;
 public class SysSequence implements Serializable {
 	private static final long serialVersionUID =  7882658796752108652L;
 
-   	@TableField(value = "seq_name")
+   	@TableId(value = "seq_name")
 	private String seqName;
 
    	@TableField(value = "prev_value")
